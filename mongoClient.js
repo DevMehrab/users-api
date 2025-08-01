@@ -1,16 +1,11 @@
 import { MongoClient } from "mongodb";
-
 import dotenv from "dotenv";
 dotenv.config();
 
-const url = process.env.MONGO_URI || "mongodb://127.0.0.1:27017";
+const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017";
 const dbName = "usersDB";
 
-const client = new MongoClient(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverApi: "1", // Optional: helps with stability on newer versions
-});
+const client = new MongoClient(uri);
 
 export let db;
 
