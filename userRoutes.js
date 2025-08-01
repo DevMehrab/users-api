@@ -4,17 +4,13 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  getSingleUser,
 } from "./userController.js";
 
 export default function userRoutes(req, res, path, param) {
   if (req.method === "GET") {
     if (param) {
-      let user = users.find((u) => u.id == param);
-      if (user) {
-        getUsers(res, user);
-      } else {
-        getUsers(res, "user not found");
-      }
+      getSingleUser(res, param);
     } else {
       getUsers(res, users);
     }
@@ -22,12 +18,7 @@ export default function userRoutes(req, res, path, param) {
     createUser(req, res);
   } else if (req.method === "PUT") {
     if (param) {
-      let user = users.find((u) => u.id == param);
-      if (user) {
-        updateUser(req, res, user);
-      } else {
-        updateUser(req, res, "user not found");
-      }
+      updateUser(req, res, param);
     } else {
       updateUser(req, res, "user not found");
     }

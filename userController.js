@@ -1,8 +1,21 @@
+import { ObjectId } from "mongodb";
 import { users } from "./db.js";
+import { db } from "./mongoClient.js";
 import { response } from "./utils.js";
 
-export function getUsers(res, users) {
+export async function getUsers(res) {
+  const users = await db.collection("users").find().toArray();
   response(res, users);
+}
+export async function getSingleUser(res, userId) {
+  const user = await db
+    .collection("users")
+    .findOne({ _id: new ObjectId(userId) });
+  if (user) {
+    response(res, user);
+  } else {
+    response(res, "user not found");
+  }
 }
 export async function createUser(req, res) {
   let parsed = await parsedData(req);
@@ -10,27 +23,27 @@ export async function createUser(req, res) {
     ...parsed,
     id: Date.now(),
   };
-  users.push(newUser);
+  const result = await db.collection("users").insertOne(newUser);
   response(res, parsed);
 }
-export async function updateUser(req, res, user) {
+export async function updateUser(req, res, userId) {
   let parsed = await parsedData(req);
 
-  let updatedUser = {
-    ...user,
-    ...parsed,
-  };
-
-  let index = users.findIndex((u) => u.id == user.id);
-  users[index] = updatedUser;
-  response(res, parsed);
+  try {
+    db.collection("users").updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: parsed }
+    );
+    response(res, parsed);
+  } catch (error) {
+    response(res, "user not found");
+  }
 }
-export function deleteUser(res, user) {
-  let index = users.findIndex((u) => u.id == user.id);
-  if (index !== -1) {
-    users.splice(index, 1);
-    response(res, user);
-  } else {
+export async function deleteUser(res, userId) {
+  try {
+    await db.collection("users").deleteOne({ _id: new ObjectId(userId) });
+    response(res, "done");
+  } catch (error) {
     response(res, "user not found");
   }
 }

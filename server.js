@@ -1,6 +1,7 @@
 import http from "http";
 import { URL } from "url";
 import userRoutes from "./userRoutes.js";
+import { connectDB } from "./mongoClient.js";
 
 const PORT = process.env.PORT || 8000;
 
@@ -25,5 +26,6 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
+  connectDB();
   console.log("server running", PORT);
 });
