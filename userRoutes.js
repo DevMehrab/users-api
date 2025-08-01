@@ -6,7 +6,7 @@ import {
   deleteUser,
 } from "./userController.js";
 
-export default function userRoutes(req, res, param) {
+export default function userRoutes(req, res, path, param) {
   if (req.method === "GET") {
     if (param) {
       let user = users.find((u) => u.id == param);
@@ -35,12 +35,12 @@ export default function userRoutes(req, res, param) {
     if (param) {
       let user = users.find((u) => u.id == param);
       if (user) {
-        deleteUser(req, res, user);
+        deleteUser(res, user);
       } else {
-        deleteUser(req, res, "user not found");
+        deleteUser(res, "user not found");
       }
     } else {
-      deleteUser(req, res, "user not found");
+      deleteUser(res, "user not found");
     }
   }
 }

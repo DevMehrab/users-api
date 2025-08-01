@@ -23,7 +23,7 @@ export async function updateUser(req, res, user) {
 
   let index = users.findIndex((u) => u.id == user.id);
   users[index] = updatedUser;
-  response(res, updatedUser);
+  response(res, parsed);
 }
 export function deleteUser(res, user) {
   let index = users.findIndex((u) => u.id == user.id);
